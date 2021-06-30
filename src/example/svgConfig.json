@@ -1,0 +1,48 @@
+{
+  "number": {
+    "font": "DIN Pro Black.otf",
+    "styles": {
+      "fill": "#6d718d",
+      "filter": {
+        "HTML_INSERTION" : "    \n    <!-- Shadow Offset -->\n    <feOffset\n      dx='0'\n      dy='0'\n    />\n    \n    <!-- Shadow Blur -->\n    <feGaussianBlur\n      stdDeviation='5'\n      result='offset-blur'\n    />\n    \n    <!-- Invert the drop shadow\n         to create an inner shadow -->\n    <feComposite\n      operator='out'\n      in='SourceGraphic'\n      in2='offset-blur'\n      result='inverse'\n    />\n    \n    <!-- Color & Opacity -->\n    <feFlood\n      flood-color='black'\n      flood-opacity='1'\n      result='color'\n    />\n    \n    <!-- Clip color inside shadow -->\n    <feComposite\n      operator='in'\n      in='color'\n      in2='inverse'\n      result='shadow'\n    />\n    \n    <!-- Put shadow over original object -->\n    <feComposite\n      operator='over'\n      in='shadow'\n      in2='SourceGraphic'\n    />"
+      }
+    }
+  },
+  "messageBottom": {
+    "font": "DIN Pro Condensed Bold.otf",
+    "padding": -40,
+    "styles": {
+      "fill": "#6d718d"
+    }
+  },
+  "messageTop": {
+    "font": "riffic-bold.ttf",
+    "styles": {
+      "stroke-width": "4px",
+      "stroke": "#321a1e",
+      "filter": {
+        "feDropShadow": {
+          "dx": "0",
+          "dy": "7",
+          "stdDeviation": "0",
+          "flood-color": "black",
+          "flood-opacity": "0.7"
+        }
+      },
+      "linearGradient": {
+        "x1": "0%",
+        "y1": "0%",
+        "x2": "0%",
+        "y2": "100%",
+        "offsets": {
+          "0%": {
+            "stop-color": "#facc22"
+          },
+          "100%": {
+            "stop-color": "#f83600"
+          }
+        }
+      }
+    }
+  }
+}
