@@ -3,6 +3,6 @@ const getFilter = require('./getFilter');
 const getLinearGradient = require('./getLinearGradient');
 
 module.exports = function getDefs(object) {
-  const insetrions = getFilter(object.filter) + getLinearGradient(object.linearGradient);
-  return convertObject2Tag('defs', {}, insetrions);
+  const insertions = getFilter(object.filter) + getLinearGradient(object.linearGradient);
+  return insertions && convertObject2Tag('defs', {}, insertions);
 };
