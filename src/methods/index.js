@@ -1,10 +1,6 @@
 const fs = require('fs');
 const TextToSVG = require('text-to-svg');
-const pathRounder = require('round-svg-path');
-const pathParser = require('parse-svg-path');
-const pathSerializer = require('serialize-svg-path');
 const getSVG = require('./getSVG');
-const object2tag = require('./object2tag');
 
 const txt2svg = {
   styles: null,
@@ -14,10 +10,6 @@ const txt2svg = {
   distPath: '',
   dictionaryPath: '',
   loadedFonts: {},
-  options: {
-    fontSize: 200,
-    anchor: 'top center',
-  },
   setStyles(object) { this.styles = object; },
   setDictionaryPath(path) { this.dictionaryPath = path; },
   setFontsPath(path) { this.fontsPath = path; },
@@ -42,44 +34,12 @@ const txt2svg = {
     });
   },
   getSvgFor(element, locale) {
-    const styles = this.styles[element];
-    const { font } = styles;
-    const padding = styles.padding || 0;
+    const svgConfig = this.styles[element];
+    const { font } = svgConfig;
     const phrase = this.dictionary[locale][element];
-    const lines = phrase.split('\n');
-
-    // generate sizes array
-    const pathsWidths = [];
-    const pathsHeights = [];
-    lines.forEach((line) => {
-      const { width, height } = this.loadedFonts[font].getMetrics(line, this.options);
-      pathsHeights.push(Math.round(height));
-      pathsWidths.push(Math.round(width));
-    });
-
-    // generate paths with translates
-    const paths = [];
-    const maxWidth = Math.max(...pathsWidths);
-    lines.forEach((line, i) => {
-      const outline = this.loadedFonts[font].getPath(line, this.options).slice(9, -3);
-      const parsedPath = pathParser(outline);
-      const translateX = maxWidth * 0.5;
-      const translateY = pathsHeights.slice(0, i)
-        .reduce((prev, curr) => prev + curr + padding, 0);
-      const pathOptions = {
-        transform: `translate(${translateX},${translateY})`,
-        d: pathSerializer(pathRounder(parsedPath, 0)),
-      };
-      const path = object2tag('path', pathOptions, false);
-      paths.push(path);
-    });
 
     // styling path with styles from json and get svg string
-    const svgString = getSVG(paths.reduce((prev, curr) => prev + curr, ''), {
-      ...styles,
-      width: maxWidth,
-      height: pathsHeights.reduce((prev, curr, index) => prev + curr + (index !== 0 && padding), 0),
-    });
+    const svgString = getSVG(svgConfig, phrase, this.loadedFonts[font]);
 
     // write svg
     const dist = `${this.distPath}/${locale}`;
