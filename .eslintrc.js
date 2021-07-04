@@ -1,6 +1,4 @@
 const OFF = 'off';
-const ERROR = 'error';
-const PRODUCTION = 'production';
 
 module.exports = {
   root: true,
@@ -13,11 +11,15 @@ module.exports = {
     'airbnb-base',
     'plugin:sonarjs/recommended',
   ],
-  rules: {
-    'no-console': process.env.NODE_ENV === PRODUCTION ? ERROR : OFF,
-    'no-debugger': process.env.NODE_ENV === PRODUCTION ? ERROR : OFF,
-    'import/no-extraneous-dependencies': OFF,
-  },
+  overrides: [
+    {
+      files: ['src/helpers/handlers.js'],
+      rules: {
+        'import/no-dynamic-require': OFF,
+        'global-require': OFF,
+      },
+    },
+  ],
   parserOptions: {
     parser: 'babel-eslint',
   },

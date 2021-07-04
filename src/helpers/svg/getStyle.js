@@ -1,10 +1,6 @@
-const ignoredParams = ['width', 'height', 'lineSpacing', 'paddingTop', 'paddingBottom'];
-
 module.exports = function getStyle(object) {
   if (object) {
     const styleObject = { ...object };
-
-    ignoredParams.forEach((param) => { delete styleObject[param]; });
 
     if (styleObject.linearGradient) {
       delete styleObject.linearGradient;

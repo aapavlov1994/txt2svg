@@ -13,10 +13,10 @@
     "url": "https://github.com/aapavlov1994/txt2svg.git"
   },
   "main": "src/index.js",
-  "files": ["src/methods"],
+  "files": ["src"],
   "scripts": {
-    "example": "node ./src/example/scriptForRun.js",
-    "lint": "eslint ./src --ext .js"
+    "example": "node example/scriptForRun.js",
+    "lint": "eslint ./src ./example --ext .js"
   },
   "devDependencies": {
     "eslint": "^7.13.0",
