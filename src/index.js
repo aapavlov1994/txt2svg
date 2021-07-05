@@ -33,7 +33,7 @@ function generateSVG(fontsRoot, output, dictionary, svgParams) {
       const SVGString = getSVG(SVGConfig, text, font);
       writeSVG(output.root, subDir, SVGName, SVGString);
     });
-    logMessage(` All SVG for "${subDir}" in "${path.resolve(output.root)}" generated.`);
+    logMessage(`SVG: ${JSON.stringify(Object.keys(dictionaryCollection[subDir]))}\n for "${subDir}" in "${path.resolve(output.root)}" generated.\n`);
   });
 }
 
