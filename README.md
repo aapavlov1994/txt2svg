@@ -120,3 +120,9 @@ You can configure dictionary like **output** passing root and subDirs arguments 
       }
     };
     ```
+  
+### Examples
+
+Run "scriptForRun.js" to try by yourself!
+
+[Example code](example)
