@@ -1,107 +1,122 @@
 # txt2svg
-_Это утилита для конвертации из текста в выбранном шрифте в изображение SVG с сохранением стилей._
+Tool for creating svg from text with chosen fonts and svg-styles.
 
-В папке example приведен рабочий пример, который состоит из node-скрипта, json-конфига со стилями,
-папки с шрифтами, папкой со словарями для необходимых локалей и папкой для выгрузки, где будут созданы
-папки с соотв. локалями и svg-изображениями в них.
+****
 
-### Гайд по node-скрипту:
+### Usage
 
-Подключяем утилиту и path пакет для получения абсолютных путей:
+`npm i --save-dev txt2svg`
+
+### Guide
+
 ```javascript
-const path = require('path');
-const txt2svg = require('../index.js'); // если это пакет => 'txt2svg'
+const generateSVG = require('txt2svg');
+/*
+...some code
+*/
+generateSVG(fontsRoot, output, dictionary, svgParams, isOneStyleForSubDir);
 ```
 
-Если стили имеют простую логику, т.е. каждому слову из словаря,
-есть соотв. объект в json конфиге, то просто подключаем конфиг и идем дальше -
-объект со стилями готов.
-```javascript
-const styles = require('./svgConfig.json');
-```
+_generateSVG_ function has 4 necessary arguments and 1 unnecessary:
+
+* **fontsRoot** - is path to directory with fonts. Fonts should be placed 
+  in this directory.
+    ```javascript
+    const fontsPath = path.resolve(__dirname, './fonts');
+    ```
+
+* **output** - is config of your output.
+
+    ```javascript
+    const localesOutput = {
+      root: path.resolve(__dirname, './output/locales'),
+      subDirs: ['en', 'ru', 'ge', 'fr', 'it']
+    };
+    ```
+
+  * **output.root** - is root path to your output directory (may not exist).
     
-Часто бывает, что стили дублируются для разных фраз.
-В этом случае лучше создать объект со стилями на лету (можно взять за основу json конфиг).
-В приведенном примере мы хотим получить два месседжа для двух ориентаций, поэтому
- мы присваиваем элементам, начинающимся с `'message_top'` соотв. стиль. Тоже самое для
- `'message_bottom'`. Если ключу из словаря есть соотв. в конфиге - присваеваем,
- для всех остальных элементов используется стиль для цифр.
-```javascript
-const dict = require('./dictionary/en.json'); // needs to generate style object on fly
-const txt2svgStyles = {}; // object for elements (future svg) with their styles
-Object.keys(dict).forEach((key) => {
-  if (key.startsWith('message_top')) txt2svgStyles[key] = styles.messageTop;
-  else if (key.startsWith('message_bottom')) txt2svgStyles[key] = styles.messageBottom;
-  // if dictionary element has styles specially for him - use it
-  else if (styles[key]) txt2svgStyles[key] = styles[key];
-  // use number style for all others elements (digits)
-  else txt2svgStyles[key] = styles.number;
-});
-```
+  * **output.subDirs** - is array of sub-directories in the root directory
+    (may not exist). Need for cycling by locales or by styles-type.
 
-Указываем абсолютные пути к папкам со шрифтами, выгрузки свг и словарю:
-```javascript
-const fontsPath = path.resolve(__dirname, './fonts');
-const distPath = path.resolve(__dirname, './output');
-const dictionaryPath = path.resolve(__dirname, './dictionary');
-```
 
-Отлавливаем локали в консоли либо задаем вручную
-(если локали не заданы, то генерация будет проходить по всем доступным локалям):
-```javascript
-const locales = process.argv.slice(2);
-```
+* **dictionary** - is config for your dictionary.
+You can configure dictionary like **output** passing root and subDirs arguments -
+  in this case phrase collections (jsons) should exist in the root dictionary with
+  subDirs naming (useful for creating txt-svg for different locales).
 
-Пробрасываем настройки и запускаем генерацию:
-```javascript
-txt2svg.setLocales(locales);
-txt2svg.setStyles(styles);
-txt2svg.setFontsPath(fontsPath);
-txt2svg.setDistPath(distPath);
-txt2svg.setDictionaryPath(dictionaryPath);
-txt2svg.run();
-```
+    ```javascript
+    const dictionary = {
+    root: path.resolve(__dirname, './dictionary'),
+    subDirs: ['en', 'ru', 'ge', 'fr', 'it']
+    };
+    ```
 
-### Гайд по json-конфигу:
+  Also, you can pass here an collection of dictionaries with string-subDirs keys:
 
-Для элемента указывается шрифт вместе с расширением (должен находиться в указанной папке),
-padding - межстрочное расстояние для элементов-мультистрок, styles - непоспредственно свг стили,
-где `stroke-width / stroke` - ширины обводки с цветом, `fill` - простая заливка, если нужна градиентная,
-то используем блок `linearGradient`, для фильтров ипользуем блок фильтр, в котором вы можете
-оформить будующий тег с атрибутами в виде объекта с соотв свойствами. Для генерации
-сложных фильтров также можно использовать сво-во `HTML_INSERTION`,
-куда вы можете передать все фильтры в виде строки (посмотрите в папке с примером):
+    ```javascript
+    const dictionary = {
+        en: {
+          phrase1: 'Hello there',
+          phrase2: 'General Kenobi',    
+        },
+        ru: {
+          phrase1: 'Ну привет',
+          phrase2: 'Генерал Кеноби',    
+        },
+    };
+    ```
 
-```json
-"messageTop": {
-    "font": "riffic-bold.ttf",
-    "padding": -40,
-    "styles": {
-      "stroke-width": "4px",
-      "stroke": "#321a1e",
-      "filter": {
-        "feDropShadow": {
-          "dx": "0",
-          "dy": "7",
-          "stdDeviation": "0",
-          "flood-color": "black",
-          "flood-opacity": "0.7"
-        }
-      },
-      "linearGradient": {
-        "x1": "0%",
-        "y1": "0%",
-        "x2": "0%",
-        "y2": "100%",
-        "offsets": {
-          "0%": {
-            "stop-color": "#facc22"
+  Or you can pass one dictionary (there is no cycle by locales in this case):
+
+    ```javascript
+    const dictionary = {
+      phrase1: 'Hello there',
+      phrase2: 'General Kenobi',
+    };
+    // also possible (in this case value === name of future svg)
+    const dictionary1 = ['Hello there', 'General Kenobi'];
+    const dictionary2 = [1, 2, 3];
+    ```
+* **svgParams** - this is config for your svg
+    ```javascript
+    const svgParams = {
+      phrase1: {
+        font: "riffic-bold.ttf",
+        width : 590, // unnecessary param
+        height : 590, // unnecessary param
+        lineSpacing: 10, // unnecessary param
+        paddingX: 5, // unnecessary param
+        paddingY: 5, // unnecessary param
+        alignX: 'center', // unnecessary param
+        alignY: 'top', // unnecessary param
+        styles: {
+          "stroke-width": "4px",
+          "stroke": "#321a1e",
+          "filter": {
+            "feDropShadow": {
+              "dx": "0",
+              "dy": "7",
+              "stdDeviation": "0",
+              "flood-color": "black",
+              "flood-opacity": "0.7"
+            }
           },
-          "100%": {
-            "stop-color": "#f83600"
+          "linearGradient": {
+            "x1": "0%",
+            "y1": "0%",
+            "x2": "0%",
+            "y2": "100%",
+            "offsets": {
+              "0%": {
+                "stop-color": "#facc22"
+              },
+              "100%": {
+                "stop-color": "#f83600"
+              }
+            }
           }
         }
       }
-    }
-  }
-```
+    };
+    ```
