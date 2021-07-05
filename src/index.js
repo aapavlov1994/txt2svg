@@ -1,3 +1,4 @@
+const path = require('path');
 const getSVG = require('./helpers/svg/getSVG');
 const { getFontsConverters, getDictionaryCollection } = require('./helpers/handlers');
 const { writeSVG, logMessage } = require('./helpers/tools');
@@ -18,14 +19,11 @@ const { writeSVG, logMessage } = require('./helpers/tools');
  *
  * @param svgParams { Object<string, Object>}
  *
- * @param isOneStyleForSubDir { Boolean } [isOneStyleForSubDir = false] - if you want apply
- * style to whole output.subDir - use this option (need for numbers or symbols first of all)
- *
  * @return { void }
  */
-function generateSVG(fontsRoot, output, dictionary, svgParams, isOneStyleForSubDir = false) {
+function generateSVG(fontsRoot, output, dictionary, svgParams) {
   const fontsConverters = getFontsConverters(fontsRoot, svgParams);
-  const dictionaryCollection = getDictionaryCollection(dictionary, output);
+  const { dictionaryCollection, isOneStyleForSubDir } = getDictionaryCollection(dictionary, output);
 
   output.subDirs.forEach((subDir) => {
     Object.keys(dictionaryCollection[subDir]).forEach((SVGName) => {
@@ -35,7 +33,7 @@ function generateSVG(fontsRoot, output, dictionary, svgParams, isOneStyleForSubD
       const SVGString = getSVG(SVGConfig, text, font);
       writeSVG(output.root, subDir, SVGName, SVGString);
     });
-    logMessage(` All SVG for "${subDir}" output subDir generated.`);
+    logMessage(` All SVG for "${subDir}" in "${path.resolve(output.root)}" generated.`);
   });
 }
 

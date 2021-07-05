@@ -76,7 +76,7 @@ You can configure dictionary like **output** passing root and subDirs arguments 
     };
     // also possible (in this case value === name of future svg)
     const dictionary1 = ['Hello there', 'General Kenobi'];
-    const dictionary2 = [1, 2, 3];
+    const dictionary2 = ['1', '2', '3'];
     ```
 * **svgParams** - this is config for your svg
     ```javascript

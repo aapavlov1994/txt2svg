@@ -36,4 +36,4 @@ generateSVG(fontsPath, localesOutput, localesDictionary, SVGConfig);
 const numbersPath = path.resolve(__dirname, './output/numbers');
 const numbersOutput = { root: numbersPath, subDirs: ['level', 'gold'] };
 const numbers = new Array(10).fill(0).map((e, i) => `${i}`);
-generateSVG(fontsPath, numbersOutput, numbers, SVGConfig, true);
+generateSVG(fontsPath, numbersOutput, numbers, SVGConfig);

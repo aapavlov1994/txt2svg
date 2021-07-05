@@ -1,6 +1,5 @@
 {
   "level": {
-    "fontSize": 40,
     "font": "DIN Pro Condensed Bold.otf",
     "styles": {
       "fill": "#ffffff",
@@ -18,7 +17,6 @@
     }
   },
   "gold": {
-    "fontSize": 40,
     "font": "DIN Pro Condensed Bold.otf",
     "styles": {
       "fill": "#dd0000",

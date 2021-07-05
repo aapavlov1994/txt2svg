@@ -7,16 +7,19 @@ const getSVGParams = require('./getSVGParams');
  * @param svgConfig
  * @param svgConfig.font { String } - font name
  * @param svgConfig.styles { Object } - SVG Styles described in Object
- * @param svgConfig.lineSpacing { Number } [lineSpacing = 500]
+ * @param svgConfig.lineSpacing { Number } [lineSpacing = 0]
  * @param svgConfig.height { Number } [height = 500] SVG height
  * @param svgConfig.width { Number } [width] SVG width
  * @param svgConfig.paddingX { Number } [paddingX = 0] will be added to SVG width
  * @param svgConfig.paddingY { Number } [paddingY = 0] will be added to SVG height
  * @param svgConfig.alignX { String } [alignX = 'center']
  * @param svgConfig.alignY { String } [alignY = 'top']
+ *
  * @param phrase { String }
+ *
  * @param TextToSVG { Object }
- * @returns { String }
+ *
+ * @returns { String } - svg in string format
  */
 module.exports = function getSVG(svgConfig, phrase, TextToSVG) {
   const { paths, width, height } = getSVGParams(svgConfig, phrase, TextToSVG);

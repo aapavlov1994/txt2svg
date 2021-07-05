@@ -1,6 +1,6 @@
 const path = require('path');
 const TextToSVG = require('text-to-svg');
-const { logMessage, validateProps, throwError } = require('./tools');
+const { validateProps, throwError } = require('./tools');
 
 const getFontsConverters = (fontsRoot, svgParams) => {
   const fontsNames = new Set();
@@ -10,31 +10,67 @@ const getFontsConverters = (fontsRoot, svgParams) => {
     try {
       fontConverters.set(fontName, TextToSVG.loadSync(`${fontsRoot}/${fontName}`));
     } catch (e) {
-      logMessage(`Can't find "${fontName}" in "${fontsRoot}".`, true);
+      throwError(`Can't find "${fontName}" in "${fontsRoot}".`);
     }
   });
 
   return fontConverters;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const getDictionaryCollection = (dictionary, output) => {
-  const dictionaryCollection = {};
   if (typeof dictionary === 'object') {
-    if (Array.isArray(dictionary)) {
+    if (Array.isArray(dictionary) && dictionary.every((el) => typeof el === 'string')) {
+      const dictionaryCollection = {};
       const dict = {};
-      dictionary.forEach((el) => { dict[el] = el; });
-      output.subDirs.forEach((subDir) => { dictionaryCollection[subDir] = dict; });
-    } else if (validateProps(dictionary, 'root', 'subDirs')) {
+      dictionary.forEach((el) => {
+        dict[el] = el;
+      });
+      output.subDirs.forEach((subDir) => {
+        dictionaryCollection[subDir] = dict;
+      });
+
+      return { dictionaryCollection, isOneStyleForSubDir: true };
+    }
+
+    if (validateProps(dictionary, 'root', 'subDirs')
+      && Array.isArray(dictionary.subDirs) && dictionary.subDirs.length
+      && Object.keys(dictionary).length === 2
+    ) {
+      const dictionaryCollection = {};
       const { root, subDirs } = dictionary;
       subDirs.forEach((subDir) => {
         const dictPath = path.resolve(root, subDir);
-        dictionaryCollection[subDir] = require(dictPath);
+        try {
+          dictionaryCollection[subDir] = require(dictPath);
+        } catch (e) {
+          throwError(`There is no dictionary "${subDir}" in ${path.resolve(root)}`);
+        }
       });
-    } else output.subDirs.forEach((subDir) => { dictionaryCollection[subDir] = dictionary; });
 
-    return dictionaryCollection;
+      return { dictionaryCollection, isOneStyleForSubDir: false };
+    }
+
+    if (Object.keys(dictionary).length && Object.keys(dictionary).every((locale) => (
+      typeof dictionary[locale] === 'object'
+      && Object.keys(dictionary).length && Object.keys(dictionary[locale]).every((name) => (
+        typeof dictionary[locale][name] === 'string'
+      ))
+    ))) {
+      return { dictionaryCollection: dictionary, isOneStyleForSubDir: false };
+    }
+
+    if (Object.keys(dictionary).length
+      && Object.keys(dictionary).every((key) => typeof dictionary[key] === 'string')) {
+      const dictionaryCollection = {};
+      output.subDirs.forEach((subDir) => { dictionaryCollection[subDir] = dictionary; });
+
+      return { dictionaryCollection, isOneStyleForSubDir: true };
+    }
+
+    return throwError(`Wrong dictionary argument structure: ${JSON.stringify(dictionary)}.`);
   }
-  return throwError('Wrong dictionary attribute structure.');
+  return throwError('Dictionary argument should be an object.');
 };
 
 module.exports = { getDictionaryCollection, getFontsConverters };
