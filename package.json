@@ -13,16 +13,18 @@
     "url": "https://github.com/aapavlov1994/txt2svg.git"
   },
   "main": "src/index.js",
-  "files": ["src"],
+  "files": [
+    "src"
+  ],
   "scripts": {
     "example": "node example/scriptForRun.js",
     "lint": "eslint ./src ./example --ext .js"
   },
   "devDependencies": {
-    "eslint": "^7.13.0",
+    "eslint": "^7.30.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-sonarjs": "^0.5.0"
   },
   "engines": {
