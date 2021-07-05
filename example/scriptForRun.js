@@ -4,36 +4,47 @@ const fs = require('fs');
 const generateSVG = require('../src');
 
 const styles = require('./svgConfig.json');
-const dict = require('./dictionary/en.json'); // needs to generate style object on fly
 
 // create output dir
 const mainRoot = path.resolve(__dirname, './output');
 if (!fs.existsSync(mainRoot)) fs.mkdirSync(mainRoot);
 
-const SVGConfig = {}; // object for elements (future svg) with their styles
-/*
-if you do not want to duplicate styles for different elements with same styles in config.json
-u can do this here on fly
-*/
-Object.keys(dict).forEach((key) => {
-  if (key.startsWith('message_top')) SVGConfig[key] = styles.messageTop;
-  else if (key.startsWith('message_bottom')) SVGConfig[key] = styles.messageBottom;
-  // if dictionary element has styles specially for him - use it
-  else if (styles[key]) SVGConfig[key] = styles[key];
-});
-Object.assign(SVGConfig, styles);
+// set styles for txt elements
+const SVGConfig = {
+  phrase1: styles.gold,
+  phrase2: styles.gold,
+  message_bottom_v: styles.messageBottom,
+  message_bottom_h: styles.messageBottom,
+  message_top_v: styles.messageTop,
+  message_top_h: styles.messageTop,
+  levelNumbers: styles.level,
+  goldNumbers: styles.gold,
+};
 
+// resolve paths
 const fontsPath = path.resolve(__dirname, './fonts');
 const localesPath = path.resolve(__dirname, './output/locales');
 const dictionaryPath = path.resolve(__dirname, './dictionary');
+const numbersPath = path.resolve(__dirname, './output/numbers');
+
 const locales = ['en', 'ru'];
-
 const localesOutput = { root: localesPath, subDirs: locales };
-const localesDictionary = { root: dictionaryPath, subDirs: locales };
+const exampleDictionary = {
+  en: {
+    phrase1: 'Hello there',
+    phrase2: 'General Kenobi',
+  },
+  ru: {
+    phrase1: 'Ну привет',
+    phrase2: 'Генерал Кеноби',
+  },
+};
 
+generateSVG(fontsPath, localesOutput, exampleDictionary, SVGConfig);
+
+const localesDictionary = { root: dictionaryPath, subDirs: locales };
 generateSVG(fontsPath, localesOutput, localesDictionary, SVGConfig);
 
-const numbersPath = path.resolve(__dirname, './output/numbers');
-const numbersOutput = { root: numbersPath, subDirs: ['level', 'gold'] };
+const numbersOutput = { root: numbersPath, subDirs: ['levelNumbers', 'goldNumbers'] };
 const numbers = new Array(10).fill(0).map((e, i) => `${i}`);
 generateSVG(fontsPath, numbersOutput, numbers, SVGConfig);

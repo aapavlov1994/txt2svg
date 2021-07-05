@@ -19,7 +19,7 @@
   "gold": {
     "font": "DIN Pro Condensed Bold.otf",
     "styles": {
-      "fill": "#dd0000",
+      "fill": "#FFFF00",
       "stroke-width": "0.06em",
       "stroke": "#ffffff"
     }
