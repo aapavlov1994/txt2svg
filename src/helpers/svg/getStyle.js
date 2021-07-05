@@ -1,6 +1,7 @@
 module.exports = function getStyle(object) {
   if (object) {
     const styleObject = { ...object };
+
     if (styleObject.linearGradient) {
       delete styleObject.linearGradient;
       styleObject.fill = 'url(#gradient)';

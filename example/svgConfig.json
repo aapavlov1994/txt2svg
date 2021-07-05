@@ -1,0 +1,66 @@
+{
+  "level": {
+    "font": "DIN Pro Condensed Bold.otf",
+    "styles": {
+      "fill": "#ffffff",
+      "stroke-width": "0.02em",
+      "stroke": "#000000",
+      "filter": {
+        "feDropShadow": {
+          "dx": "0",
+          "dy": "2",
+          "stdDeviation": "0",
+          "flood-color": "#000000",
+          "flood-opacity": "0.4"
+        }
+      }
+    }
+  },
+  "gold": {
+    "font": "DIN Pro Condensed Bold.otf",
+    "styles": {
+      "fill": "#FFFF00",
+      "stroke-width": "0.06em",
+      "stroke": "#ffffff"
+    }
+  },
+  "messageBottom": {
+    "font": "DIN Pro Condensed Bold.otf",
+    "padding": -40,
+    "styles": {
+      "fill": "#6d718d"
+    }
+  },
+  "messageTop": {
+    "font": "riffic-bold.ttf",
+    "width" : 590,
+    "height" : 590,
+    "styles": {
+      "stroke-width": "4px",
+      "stroke": "#321a1e",
+      "filter": {
+        "feDropShadow": {
+          "dx": "0",
+          "dy": "7",
+          "stdDeviation": "0",
+          "flood-color": "black",
+          "flood-opacity": "0.7"
+        }
+      },
+      "linearGradient": {
+        "x1": "0%",
+        "y1": "0%",
+        "x2": "0%",
+        "y2": "100%",
+        "offsets": {
+          "0%": {
+            "stop-color": "#facc22"
+          },
+          "100%": {
+            "stop-color": "#f83600"
+          }
+        }
+      }
+    }
+  }
+}
