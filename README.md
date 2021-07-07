@@ -112,7 +112,7 @@ You can configure dictionary like **output** passing root and subDirs arguments 
               { "dx": "5", "dy": "0", "stdDeviation": "4", "flood-color": "red", "flood-opacity": "1" },
               { "dx": "0", "dy": "15", "stdDeviation": "10", "flood-color": "blue", "flood-opacity": "0.8" }
             ]
-            // also you can specify others filers as objects
+            // also you can specify others filters as objects
           },
           // linearGradient will overwrite "fill" option
           "linearGradient": {
