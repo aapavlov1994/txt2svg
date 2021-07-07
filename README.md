@@ -78,7 +78,8 @@ You can configure dictionary like **output** passing root and subDirs arguments 
     const dictionary1 = ['Hello there', 'General Kenobi'];
     const dictionary2 = ['1', '2', '3'];
     ```
-* **svgParams** - this is config for your svg
+* **svgParams** - this is config for your svg.
+  In example bellow you can see all options that you can pass.
     ```javascript
     const svgParams = {
       phrase1: {
@@ -93,15 +94,27 @@ You can configure dictionary like **output** passing root and subDirs arguments 
         styles: {
           "stroke-width": "4px",
           "stroke": "#321a1e",
+          "fill": "red",
+          // order of filters is important,
+          // always use innerShadow first
           "filter": {
-            "feDropShadow": {
-              "dx": "0",
-              "dy": "7",
-              "stdDeviation": "0",
-              "flood-color": "black",
-              "flood-opacity": "0.7"
-            }
+            // only one inner shadow can be aplied 
+            "innerShadow": {
+              "dy": 15,
+              "dx": 15,
+              "stdDeviation": "15",
+              "color": "green",
+              "opacity": "1"
+            },
+            // array of outer shadow
+            "outerShadows": [
+              { "dx": "0", "dy": "2", "stdDeviation": "1", "flood-color": "#000000", "flood-opacity": "0.4" },
+              { "dx": "5", "dy": "0", "stdDeviation": "4", "flood-color": "red", "flood-opacity": "1" },
+              { "dx": "0", "dy": "15", "stdDeviation": "10", "flood-color": "blue", "flood-opacity": "0.8" }
+            ]
+            // also you can specify others filters as objects
           },
+          // linearGradient will overwrite "fill" option
           "linearGradient": {
             "x1": "0%",
             "y1": "0%",

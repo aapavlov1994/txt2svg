@@ -1,16 +1,29 @@
+const getStyleFromObject = (object) => (
+  Object.keys(object)
+    .reduce((acc, key) => `${acc}${key}: ${object[key]};\n`, '\n'));
+
 module.exports = function getStyle(object) {
   if (object) {
-    const styleObject = { ...object };
+    const mainObject = { ...object };
+    const borderObject = { stroke: object.stroke, 'stroke-width': object['stroke-width'] };
 
-    if (styleObject.linearGradient) {
-      delete styleObject.linearGradient;
-      styleObject.fill = 'url(#gradient)';
+    delete mainObject.stroke;
+    delete mainObject['stroke-width'];
+
+    if (mainObject.linearGradient) {
+      delete mainObject.linearGradient;
+      mainObject.fill = 'url(#gradient)';
     }
-    if (styleObject.filter) styleObject.filter = 'url(#filter)';
-    const stringStyle = Object.keys(styleObject)
-      .reduce((acc, key) => `${acc}\n${key}: ${styleObject[key]};`, '');
+    if (mainObject.filter) mainObject.filter = 'url(#filter)';
+    const mainStyle = getStyleFromObject(mainObject);
+    const borderStyle = getStyleFromObject(borderObject);
 
-    return `<style>path {${stringStyle}}</style>`;
+    return `
+    <style>
+      #main {${mainStyle}}
+      #border {${borderStyle}}
+    </style>
+    `;
   }
   return '';
 };
