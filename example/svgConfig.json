@@ -3,15 +3,34 @@
     "font": "DIN Pro Condensed Bold.otf",
     "styles": {
       "fill": "#ffffff",
-      "stroke-width": "0.02em",
+      "stroke-width": "5px",
       "stroke": "#000000",
       "filter": {
-        "feDropShadow": {
-          "dx": "0",
-          "dy": "2",
-          "stdDeviation": "0",
-          "flood-color": "#000000",
-          "flood-opacity": "0.4"
+        "innerShadow": {
+          "dy": 15,
+          "dx": 15,
+          "stdDeviation": "15",
+          "color": "green",
+          "opacity": "1"
+        },
+        "outerShadows": [
+          { "dx": "0", "dy": "2", "stdDeviation": "1", "flood-color": "#000000", "flood-opacity": "0.4" },
+          { "dx": "5", "dy": "0", "stdDeviation": "4", "flood-color": "red", "flood-opacity": "1" },
+          { "dx": "0", "dy": "15", "stdDeviation": "10", "flood-color": "blue", "flood-opacity": "0.8" }
+        ]
+      },
+      "linearGradient": {
+        "x1": "0%",
+        "y1": "0%",
+        "x2": "0%",
+        "y2": "100%",
+        "offsets": {
+          "0%": {
+            "stop-color": "#facc22"
+          },
+          "100%": {
+            "stop-color": "#f83600"
+          }
         }
       }
     }

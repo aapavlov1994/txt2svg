@@ -71,13 +71,19 @@ module.exports = function getSVGParams(styles, phrase, svgConverter) {
     const translateY = diffTop + paddingY + (roundedLineHeight + lineSpacing) * i;
     const pathOptions = {
       transform: `translate(${translateX},${translateY})`,
+      id: `path${i}`,
       d: pathSerializer(pathRounder(parsedPath, 0)),
     };
     return object2tag('path', pathOptions, false);
   });
 
+  const mainPaths = object2tag('g', { id: 'main' }, paths.join(''));
+  const usedTags = paths.map((e, i) => (
+    object2tag('use', { href: `#path${i}`, fill: 'none' }, false)));
+  const borderPaths = object2tag('g', { id: 'border' }, usedTags.join(''));
+
   return {
-    paths: paths.join(''),
+    paths: mainPaths + borderPaths,
     width: svgWidth + paddingX * 2,
     height: svgHeight + paddingY * 2,
   };
